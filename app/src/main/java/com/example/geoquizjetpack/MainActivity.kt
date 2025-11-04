@@ -175,41 +175,37 @@ fun LandscapeLayout(
                 ) {
                     // Pregunta
                     Text(
-                        text = "Canberra is the capital of Australia.",
+                        stringResource(currentQuestion.textResId),
+                        fontSize = 16.sp,
                         textAlign = TextAlign.Center
-
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Botones de respuesta
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        FilledTonalButton(
-                            onClick = { /* Acción para respuesta True */ },
-                            modifier = Modifier.padding(end = 8.dp)
-                        ) {
-                            Text(text = "TRUE")
+                        FilledTonalButton(onClick = { onAnswerClicked(true) }) {
+                            Text(stringResource(R.string.btnTrue))
                         }
-                        FilledTonalButton(
-                            onClick = { /* Acción para respuesta False */ },
-                            modifier = Modifier.padding(start = 8.dp)
-                        ) {
-                            Text(text = "FALSE")
+                        Spacer(modifier = Modifier.height(12.dp))
+                        FilledTonalButton(onClick = { onAnswerClicked(false) }) {
+                            Text(stringResource(R.string.btnFalse))
                         }
                     }
 
                 }
 
                 // Botón "Next"
-                FilledTonalButton(onClick = { /* Acción para siguiente pregunta */ },
+                FilledTonalButton(onClick = onNextClicked,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(horizontal = 16.dp),
+                        .padding(bottom = 8.dp, end = 8.dp)
                 ) {
-                    Text(text = "NEXT")
+                    Text(text = stringResource(R.string.btnNext))
                 }
             }
         }
