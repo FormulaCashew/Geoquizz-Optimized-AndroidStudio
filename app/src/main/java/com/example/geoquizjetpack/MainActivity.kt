@@ -56,16 +56,33 @@ fun MyScreen(){
 fun HandleOrientationChanges(){
     val configuration= LocalConfiguration.current
     val isLandscape=configuration.orientation== Configuration.ORIENTATION_LANDSCAPE
-    if (isLandscape){
-        LandscapeLayout()
+    QuizLayout(isLandscape)
+}
+
+@Composable
+fun QuizLayout(isHorizontal: Boolean) {
+    val context= LocalContext.current
+
+    val mQuestionBank=listOf(Question(R.string.question_australia,true),
+        Question(R.string.question_asia,true),
+        Question(R.string.question_africa,false),
+        Question(R.string.question_americas,true),
+        Question(R.string.question_mideast,false),
+        Question(R.string.question_oceans,true)
+    )
+    var currentIndex by rememberSaveable { mutableIntStateOf(0) }
+    val currentQuestion=mQuestionBank[currentIndex]
+
+    if(isHorizontal){
+        LandscapeLayout(currentQuestion)
     } else {
-        PortraitLayout()
+        PortraitLayout(currentQuestion)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PortraitLayout() {
+fun PortraitLayout(currentQuestion: Question) {
 
     val context= LocalContext.current
 
@@ -77,18 +94,7 @@ fun PortraitLayout() {
         Question(R.string.question_oceans,true)
          )
 
-    //var currentIndex by remember { mutableIntStateOf(0) }
-    //var feedback by remember { mutableStateOf<String?>(null) }
-
-    //Estos valores se conservan al rotar la pantalla
-    // Para estados simples Int, String, Boolean se puede emplear rememberSaveable
-    // Para objetos más complejos o personalizados emplea Saver.
-
     var currentIndex by rememberSaveable { mutableIntStateOf(0) }
-
-
-
-    val currentQuestion=mQuestionBank[currentIndex]
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("GeoQuiz") }) }
@@ -139,7 +145,7 @@ fun PortraitLayout() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LandscapeLayout(){
+fun LandscapeLayout(currentQuestion: Question){
     Scaffold(
         topBar = {
             // Barra superior con el título
