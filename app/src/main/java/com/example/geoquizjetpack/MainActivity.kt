@@ -73,6 +73,14 @@ fun QuizLayout(isHorizontal: Boolean) {
     var currentIndex by rememberSaveable { mutableIntStateOf(0) }
     val currentQuestion=mQuestionBank[currentIndex]
 
+    val onClickedAns: (Boolean) -> Unit = { userAnswer ->
+        val isCorrect = userAnswer == currentQuestion.answer
+        val msg = if (isCorrect) context.getString(R.string.correct_toast) else context.getString(R.string.incorrect_toast)
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+    }
+    val onClickedNext: () -> Unit = {
+        currentIndex = (currentIndex + 1) % mQuestionBank.size
+    }
     if(isHorizontal){
         LandscapeLayout(currentQuestion)
     } else {
