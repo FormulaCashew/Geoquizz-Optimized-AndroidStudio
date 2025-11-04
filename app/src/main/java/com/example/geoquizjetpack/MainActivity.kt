@@ -82,27 +82,19 @@ fun QuizLayout(isHorizontal: Boolean) {
         currentIndex = (currentIndex + 1) % mQuestionBank.size
     }
     if(isHorizontal){
-        LandscapeLayout(currentQuestion)
+        LandscapeLayout(currentQuestion,onClickedAns,onClickedNext)
     } else {
-        PortraitLayout(currentQuestion)
+        PortraitLayout(currentQuestion,onClickedAns,onClickedNext)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PortraitLayout(currentQuestion: Question) {
-
-    val context= LocalContext.current
-
-    val mQuestionBank=listOf(Question(R.string.question_australia,true),
-        Question(R.string.question_asia,true),
-        Question(R.string.question_africa,false),
-        Question(R.string.question_americas,true),
-        Question(R.string.question_mideast,false),
-        Question(R.string.question_oceans,true)
-         )
-
-    var currentIndex by rememberSaveable { mutableIntStateOf(0) }
+fun PortraitLayout(
+    currentQuestion: Question,
+    onAnswerClicked: (Boolean) -> Unit,
+    onNextClicked: () -> Unit
+) {
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("GeoQuiz") }) }
@@ -127,21 +119,17 @@ fun PortraitLayout(currentQuestion: Question) {
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    FilledTonalButton(onClick = {
-                        val msg = if (currentQuestion.answer) "Correct!" else "Incorrect!"
-                        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
-                    }) { Text(stringResource(R.string.btnTrue)) }
-                    FilledTonalButton(onClick = {
-                        val msg = if (!currentQuestion.answer) "Correct!" else "Incorrect!"
-                        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
-                    }) { Text(stringResource(R.string.btnFalse)) }
-
+                    FilledTonalButton(onClick = { onAnswerClicked(true)} ) {
+                        Text(stringResource(R.string.btnTrue))
+                    }
+                    FilledTonalButton(onClick = { onAnswerClicked(false)} ) {
+                        Text(stringResource(R.string.btnFalse))
+                    }
                 }
-
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    FilledTonalButton(onClick = {
-                        currentIndex=(currentIndex+1)%mQuestionBank.size
-                    }) { Text(text=stringResource(R.string.btnNext)) }
+                    FilledTonalButton(onClick = { onNextClicked() }) {
+                        Text(text=stringResource(R.string.btnNext))
+                    }
 
                 }
             }
@@ -153,7 +141,11 @@ fun PortraitLayout(currentQuestion: Question) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LandscapeLayout(currentQuestion: Question){
+fun LandscapeLayout(
+    currentQuestion: Question,
+    onAnswerClicked: (Boolean) -> Unit,
+    onNextClicked: () -> Unit
+){
     Scaffold(
         topBar = {
             // Barra superior con el título
